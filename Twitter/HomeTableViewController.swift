@@ -44,6 +44,8 @@ class HomeTableViewController: UITableViewController {
             self.myRefreshControl.endRefreshing()
         }, failure: { (Error) in
             print("couldn't retreive tweets")
+            print(Error)
+            self.myRefreshControl.endRefreshing()
         })
     }
     
@@ -71,7 +73,7 @@ class HomeTableViewController: UITableViewController {
     }
     
     
-    
+    var favorited:Bool = false
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -88,7 +90,15 @@ class HomeTableViewController: UITableViewController {
         if let imageData = data {
             cell.profileImageView.image = UIImage(data: imageData)
         }
+        
+        cell.setFavorite(tweetArray[indexPath.row]["favorited"] as! Bool)
+        cell.tweetId = tweetArray[indexPath.row]["id"] as! Int
+        
         return cell
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.loadTweets()
     }
     override func viewDidLoad() {
         super.viewDidLoad()
