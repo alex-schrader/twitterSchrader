@@ -10,7 +10,7 @@ import UIKit
 import BDBOAuth1Manager
 
 class TwitterAPICaller: BDBOAuth1SessionManager {    
-    static let client = TwitterAPICaller(baseURL: URL(string: "https://api.twitter.com"), consumerKey: "", consumerSecret: "")
+    static let client = TwitterAPICaller(baseURL: URL(string: "https://api.twitter.com"), consumerKey: "bLSxkDslYHTRu7n4TwD8U2aCF", consumerSecret: "VDKXEvoyFJX4PxK2LO1p7CeBD3uIQkBy06xH1pPTnpAAM1R8yG")
     var loginSuccess: (() -> ())?
     var loginFailure: ((Error) -> ())?
     
@@ -75,6 +75,15 @@ class TwitterAPICaller: BDBOAuth1SessionManager {
     
     func unfavoriteTweet(tweetId:Int, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
         let url = "https://api.twitter.com/1.1/favorites/destroyjson"
+        TwitterAPICaller.client?.post(url, parameters: ["id": tweetId], progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
+            success()
+        }, failure: { (task: URLSessionDataTask?, error: Error) in
+            failure(error)
+        })
+    }
+    
+    func retweet(tweetId:Int, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        let url = "https://api.twitter.com/1.1/statuses/retweet/\(tweetId).json"
         TwitterAPICaller.client?.post(url, parameters: ["id": tweetId], progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
             success()
         }, failure: { (task: URLSessionDataTask?, error: Error) in
